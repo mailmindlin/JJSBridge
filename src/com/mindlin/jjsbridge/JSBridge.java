@@ -13,6 +13,9 @@ import java.nio.file.Path;
 import javax.script.CompiledScript;
 import javax.script.ScriptException;
 
+import com.mindlin.jjsbridge.std.Console;
+
+import jdk.nashorn.api.scripting.JSObject;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
@@ -21,12 +24,14 @@ public class JSBridge {
 	protected final NashornScriptEngine engine;
 	public JSBridge() {
 		engine = (NashornScriptEngine) new NashornScriptEngineFactory().getScriptEngine(classLoader);
-		try {
-			engine.put("console", java.lang.System.out);
-			engine.eval("load('nashorn:mozilla_compat.js');");
-		} catch (ScriptException e) {
-			e.printStackTrace();
-		}
+	}
+	public JSBridge exposeConsole() {
+//		engine.put("console", new Console());
+		return this;
+	}
+	public JSBridge exposeClass(String s) {
+		//TODO fin
+		return this;
 	}
 	public CompiledScript compile(BufferedReader js) throws ScriptException {
 		return engine.compile(js);
@@ -36,6 +41,12 @@ public class JSBridge {
 	}
 	public void eval(BufferedReader br) throws ScriptException {
 		engine.eval(br);
+	}
+	public void exposeObject(String name, JSObject object) {
+		engine.put(name, object);
+	}
+	public void exposeObject(String name, Object object) {
+		
 	}
 	public Object invokeFunction(String name, Object...args) throws NoSuchMethodException, ScriptException {
 		return engine.invokeFunction(name, args);

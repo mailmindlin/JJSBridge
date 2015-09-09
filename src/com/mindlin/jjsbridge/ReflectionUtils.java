@@ -22,6 +22,11 @@ public class ReflectionUtils {
 		else
 			return prim;
 	}
+	/**
+	 * Convert class to boxed version of said class
+	 * @param boxed
+	 * @return
+	 */
 	public static Class<?> boxClass(Class<?> boxed) {
 		if(boxed.equals(byte.class))
 			return Byte.class;
@@ -40,7 +45,7 @@ public class ReflectionUtils {
 		else if(boxed.equals(char.class))
 			return Character.class;
 		else
-			return boxed;
+			throw new IllegalArgumentException("Illegal class "+boxed.toString());
 	}
 	public static Object unbox(Object boxed) {
 		Class<?> bcl=boxed.getClass();
@@ -63,6 +68,12 @@ public class ReflectionUtils {
 		else
 			return boxed;
 	}
+	/**
+	 * Converts number to 
+	 * @param n
+	 * @param unboxed
+	 * @return
+	 */
 	public static Object convertNumber(Number n, Class<?> unboxed) {
 		if(unboxed.equals(byte.class))
 			return n.byteValue();
@@ -79,6 +90,12 @@ public class ReflectionUtils {
 		else
 			return null;
 	}
+	/**
+	 * Tries to cast object a to class B, trying many different methods.
+	 * @param a
+	 * @param bcl
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static <A, B> B resolve(A a, Class<B> bcl) {
 		if(a==null)

@@ -1,7 +1,7 @@
 package com.mindlin.jjsbridge;
 
 /**
- * ClassLoader that only allows the loading of 
+ * ClassLoader that only allows the loading of some stuff (currently none, for debug)
  * @author mailmindlin
  */
 public class JSSandboxedClassLoader extends ClassLoader {

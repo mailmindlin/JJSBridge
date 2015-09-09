@@ -10,21 +10,42 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class JSExternFunctionWrapper<R> extends JSObjectImpl {
+	/**
+	 * Wrap method, to expose it to the JS
+	 * @param m the method to wrap
+	 * @return wrapped method
+	 */
 	public static <R extends Object> JSExternFunctionWrapper<R> fromMethod(Method m) {
 		return new JSExternMethodWrapper<R>(m);
 	}
-
+	/**
+	 * Wrap multiple methods. Methods will be attempted to be called by their number of arguments, then
+	 * by their argument types (more iffy).
+	 * @param methods methods to wrap together (usually overloaded methods)
+	 * @return wrapped bundle
+	 */
 	public static <R> JSExternFunctionWrapper<R> fromMethods(Method...methods) {
 		return new JSExternMultiMethodWrapper<R>(methods);
 	}
-
+	
+	/**
+	 * Function to call. The first argument is the 'this' of the JS call, and the second is an
+	 * array of the arguments. 
+	 */
 	protected WrappedBiFunction<Object, Object[], R> f;
 
+	/**
+	 * Essentially just wrap a 
+	 * @param f
+	 */
 	public JSExternFunctionWrapper(WrappedBiFunction<Object, Object[], R> f) {
 		super();
 		this.f = f;
 	}
-
+	
+	/**
+	 * On call
+	 */
 	@Override
 	public R call(final Object thiz, final Object... args) {
 		return f.apply(thiz, args);
