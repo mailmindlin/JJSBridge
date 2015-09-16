@@ -11,7 +11,7 @@ public class ArrayBuffer {
 	//NOT externalized
 	protected final ByteBuffer buffer;
 	@JSPrototype
-	protected static final HashMap<String, JSProperty> prototype = JSObjectImpl.__proto__();
+	protected static final HashMap<String, JSProperty> prototype = JSObjectImpl.__proto__(ArrayBuffer.class);
 	public ArrayBuffer(int length) {
 		buffer = ByteBuffer.allocate(length);//TODO should be allocateDirect?
 	}

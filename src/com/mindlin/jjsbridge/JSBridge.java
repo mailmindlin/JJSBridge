@@ -4,11 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptException;
@@ -22,15 +28,28 @@ import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 public class JSBridge {
 	protected JSSandboxedClassLoader classLoader;
 	protected final NashornScriptEngine engine;
+	protected final List<JSPluginManager> pluginManagers = new ArrayList<>();
 	public JSBridge() {
 		engine = (NashornScriptEngine) new NashornScriptEngineFactory().getScriptEngine(classLoader);
+		engine.put("require", ((Function<String, Object>)(name)->{
+			Optional<JSPluginManager> manager = pluginManagers.stream().filter((mgr)->(mgr.test(name))).findFirst();
+			if (!manager.isPresent())
+				return null;
+			return manager.get().load(name);
+		}));
 	}
-	public JSBridge exposeConsole() {
-//		engine.put("console", new Console());
+	public JSBridge expose(String name) {
+		switch(name) {
+		case "console":
+			engine.put("console", new Console());
+			break;
+		case "ArrayBuffer":
+//			engine.put("ArrayBuffer");
+		}
 		return this;
 	}
-	public JSBridge exposeClass(String s) {
-		//TODO fin
+	public JSBridge exposeClass(String className, String name) throws ScriptException {
+		engine.put(name, engine.eval(className));
 		return this;
 	}
 	public CompiledScript compile(BufferedReader js) throws ScriptException {

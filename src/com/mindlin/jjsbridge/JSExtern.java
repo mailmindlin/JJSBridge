@@ -1,4 +1,4 @@
-package com.mindlin.jjsbridge
+package com.mindlin.jjsbridge;
 
 public @interface JSExtern {
 	/**
@@ -13,7 +13,7 @@ public @interface JSExtern {
 	 */
 	boolean enumerable() default false;
 	/**
-	 * True iff the value associated with the prperty may be changed with an assignment operator.
+	 * True iff the value associated with the porperty may be changed with an assignment operator.
 	 * Must be false for final fields (setting other wise will either throw an error or be ignored)
 	 */
 	boolean writable() default false;
