@@ -27,9 +27,15 @@ public class JSProperty implements Serializable {
 		this.setter=setter;
 	}
 	public Object get(JSObjectImpl obj) {
-		if(getter!=null)
-			return getter.apply(new Pair<JSObjectImpl,JSProperty>(obj,this));
-		return value;
+		if(getter == null)
+			return value;
+		return getter.apply(new Pair<JSObjectImpl,JSProperty>(obj,this));
+	}
+	public void set(JSObjectImpl obj, Object value) {
+		if (setter == null)
+			this.value = value;
+		else
+			setter.apply(new Pair<JSObjectImpl, JSProperty>(obj, this), value);
 	}
 	public String valuestr() {
 		return (value instanceof Object)?value.toString():(""+value);
@@ -37,5 +43,8 @@ public class JSProperty implements Serializable {
 	@Override
 	public String toString() {
 		return getClass()+"@{value:"+valuestr()+",enumerable:"+enumerable+",configurable:"+configurable+",writable:"+writable+"}";
+	}
+	public boolean requiresInitialization() {
+		return false;
 	}
 }

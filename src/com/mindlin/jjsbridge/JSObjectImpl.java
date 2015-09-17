@@ -1,11 +1,9 @@
 package com.mindlin.jjsbridge;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,7 +14,7 @@ import org.javatuples.Pair;
 import com.mindlin.jjsbridge.JSExternFunctionWrapper.JSExternMethodWrapper;
 import com.mindlin.jjsbridge.JSExternFunctionWrapper.JSExternMultiMethodWrapper;
 import com.mindlin.jjsbridge.annotations.JSExtern;
-import com.mindlin.jjsbridge.annotations.JSGhostProperty;
+import com.mindlin.jjsbridge.annotations.JSPrototype;
 
 import jdk.nashorn.api.scripting.AbstractJSObject;
 
@@ -24,29 +22,7 @@ public class JSObjectImpl extends AbstractJSObject {
 	public static Method[] getExternalizedMethods(Class<?> c) {
 		return null;//TODO fin
 	}
-	public static HashMap<String, JSProperty> __proto__(Class<?> c) {
-		HashMap<String, JSProperty> result = new HashMap<>();
-		//get ghost methods
-		for (JSGhostProperty ghostProperty : c.getAnnotationsByType(JSGhostProperty.class)) {
-			JSProperty proto = new JSProperty(null, ghostProperty.enumerable(),ghostProperty.configurable(), ghostProperty.writable(), null, null);
-			result.put(ghostProperty.name(), proto);
-		}
-		Field[] fields = c.getDeclaredFields();
-		for(Field field : fields) {
-			if(field.isAnnotationPresent(JSExtern.class)) {
-				boolean wasAccessible = field.isAccessible();
-				field.setAccessible(true);
-				try {
-//					JSProperty property = 
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
-				} finally {
-					field.setAccessible(wasAccessible);
-				}
-			}
-		}
-		return null;
-	}
+	@JSPrototype
 	protected ConcurrentHashMap<String, JSProperty> properties = new ConcurrentHashMap<String, JSProperty>();
 	public JSObjectImpl() {
 		Class<?> clazz=getClass();

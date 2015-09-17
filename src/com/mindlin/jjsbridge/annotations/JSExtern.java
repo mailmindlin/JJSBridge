@@ -3,6 +3,12 @@ package com.mindlin.jjsbridge.annotations;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Way to declare a virtual property (only supported by getters/setters).
+ * @author mailmindlin
+ *
+ */
+
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JSExtern {
 	String name() default "";

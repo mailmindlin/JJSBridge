@@ -1,5 +1,12 @@
 package com.mindlin.jjsbridge;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 public class ReflectionUtils {
 	public static Object box(Object prim) {
 		Class<?> pcl=prim.getClass();
@@ -115,5 +122,22 @@ public class ReflectionUtils {
 			return (B)unbox(a);
 		throw new ClassCastException("Can't figure out how to cast "
 				+ a.getClass().getName() + " to " + bcl.getName());
+	}
+	public static Object get(Field f, Object donor) throws IllegalArgumentException, IllegalAccessException {
+		boolean wasAccessible = f.isAccessible();
+		try {
+			f.setAccessible(true);
+			return f.get(donor);
+		} finally {
+			f.setAccessible(wasAccessible);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public static <A> Iterable<A> join(A[]...args) {
+		int len = 0;
+		Set<A> result = new HashSet<A>();
+		for(A[] arg : args)
+			result.addAll(Arrays.asList(arg));
+		return result;
 	}
 }

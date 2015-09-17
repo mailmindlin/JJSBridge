@@ -1,4 +1,4 @@
-package com.mindlin.jjsbridge;
+package com.mindlin.jjsbridge.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

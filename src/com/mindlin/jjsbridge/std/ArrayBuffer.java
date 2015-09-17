@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import com.mindlin.jjsbridge.JSObjectImpl;
 import com.mindlin.jjsbridge.JSProperty;
-import com.mindlin.jjsbridge.JSPrototype;
+import com.mindlin.jjsbridge.annotations.JSPrototype;
 
 public class ArrayBuffer {
 	//NOT externalized
